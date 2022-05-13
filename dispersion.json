@@ -1,0 +1,40 @@
+{
+    "keywords": "python developer",
+    "dispersion": [
+        {
+            "name": "Москва",
+            "percent": "35.0%",
+            "count": 7
+        },
+        {
+            "name": "Санкт-Петербург",
+            "percent": "30.0%",
+            "count": 6
+        },
+        {
+            "name": "Минск",
+            "percent": "15.0%",
+            "count": 3
+        },
+        {
+            "name": "Нижний Новгород",
+            "percent": "5.0%",
+            "count": 1
+        },
+        {
+            "name": "Калуга",
+            "percent": "5.0%",
+            "count": 1
+        },
+        {
+            "name": "Екатеринбург",
+            "percent": "5.0%",
+            "count": 1
+        },
+        {
+            "name": "Польша",
+            "percent": "5.0%",
+            "count": 1
+        }
+    ]
+}
