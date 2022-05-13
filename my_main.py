@@ -9,54 +9,60 @@ my_city_list = []
 total_skill = []
 total_city = []
 main_count = 0
-page_count = 0
+
 modify_my_city_list = []
 modify_skill_list = []
 
 DOMAIN = 'https://api.hh.ru/'
 
-proff = 'python developer'
+proff = input('Выберите профессию для анализа: ')
+page = int(input('Сколько страниц анализировать? (мах 100): '))
+# proff = 'python developer'
 
 url_vacancies = f'{DOMAIN}vacancies'
 
 #Перебор страниц
 
-for page in range(1):
+for page_count in range(page):
 
     print(f'Парсинг страницы {page_count+1}')
     params = {
-        'text': proff
+        'text': proff,
+        'page': page_count
     }
     page_count += 1
     vacancy_count = 0
     # Перебор 20 вакансий на странице
     for k in range(20):
-        main_count += 1
-        vacancy_count += 1
-        #Сколько ваканский спарсили на текущей странице
-        print(vacancy_count)
-        #Вытаскиваем нужный url (где есть skill) для дальнейшей обработки
-        result = requests.get(url_vacancies, params=params).json()
-        url_skill = result['items'][k]['url']
-        my_result = requests.get(url_skill).json()
-        #Записываем Skill в список
-        my_skill = my_result['key_skills']
-        lens = len(my_skill)
+        try:
+            main_count += 1
+            vacancy_count += 1
+            #Сколько ваканский спарсили на текущей странице
+            print(vacancy_count)
+            #Вытаскиваем нужный url (где есть skill) для дальнейшей обработки
+            result = requests.get(url_vacancies, params=params).json()
+            url_skill = result['items'][k]['url']
+            my_result = requests.get(url_skill).json()
+            #Записываем Skill в список
+            my_skill = my_result['key_skills']
+            lens = len(my_skill)
 
-        if len(my_skill) != 0:
-            for counter in range(lens):
-                my_skill_list.append(my_skill[counter]['name'])
-        else: pass
+            if len(my_skill) != 0:
+                for counter in range(lens):
+                    my_skill_list.append(my_skill[counter]['name'])
+            else: pass
 
-        my_name = my_result['name']
-        my_address = my_result['area']
-        if my_address == None:
-            my_city = 'Неизвестно'
+            my_name = my_result['name']
+            my_address = my_result['area']
+            if my_address == None:
+                my_city = 'Неизвестно'
 
-        else:
-            my_city = my_address['name']
+            else:
+                my_city = my_address['name']
 
-        my_city_list.append(my_city)
+            my_city_list.append(my_city)
+        except:
+            pass
 
     print(f'Всего вакансий спарсено {main_count}')
 
