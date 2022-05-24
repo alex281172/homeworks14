@@ -5,6 +5,7 @@ from collections import Counter
 from operator import itemgetter
 import json
 from telebot import types
+from telebot import util
 
 TOKEN = '5247529999:AAEwdEr1aEx4RcKDyLapU8jet-vk-qqulVo'
 
@@ -133,26 +134,21 @@ def parsing(message):
         lens_end_skill = len(modify_skill_list)
         lens_end_city = len(modify_my_city_list)
 
-        modify_skill_list_new = Counter(modify_skill_list).most_common(10)
-        modify_my_city_list_new = Counter(modify_my_city_list).most_common(10)
-        # print(modify_my_city_list_new)
-        # print('*' * 50)
-        # print(modify_skill_list_new)
-
-
-        bot.send_message(message.chat.id, '-' * 20)
-
-        bot.send_message(message.chat.id, f'Парсинга - НАВЫКИ для: {proff.upper()}:')
-        for counter in modify_skill_list_new:
-            print(counter)
-            bot.send_message(message.chat.id, f'{counter}:')
-        bot.send_message(message.chat.id, '-' * 20)
-
-        bot.send_message(message.chat.id, f'Парсинга - ГОРОДА для: {proff.upper()}:')
-        for counter in modify_my_city_list_new:
-            print(counter)
-            bot.send_message(message.chat.id, f'{counter}:')
-        bot.send_message(message.chat.id, '-' * 20)
+        # modify_skill_list_new = Counter(modify_skill_list).most_common(10)
+        # modify_my_city_list_new = Counter(modify_my_city_list).most_common(10)
+        # bot.send_message(message.chat.id, '-' * 20)
+        #
+        # bot.send_message(message.chat.id, f'Парсинга - НАВЫКИ для: {proff.upper()}:')
+        # for counter in modify_skill_list_new:
+        #     print(counter)
+        #     bot.send_message(message.chat.id, f'{counter}:')
+        # bot.send_message(message.chat.id, '-' * 20)
+        #
+        # bot.send_message(message.chat.id, f'Парсинга - ГОРОДА для: {proff.upper()}:')
+        # for counter in modify_my_city_list_new:
+        #     print(counter)
+        #     bot.send_message(message.chat.id, f'{counter}:')
+        # bot.send_message(message.chat.id, '-' * 20)
 
         # bot.send_message(message.chat.id, f'Парсинга - НАВЫКИ для: {proff.upper()}:')
         for counter in range(lens_end_skill):
@@ -199,12 +195,25 @@ def parsing(message):
         print('Успешно создан файл result.fson со списком необходимых навыков')
         bot.send_message(message.chat.id, f'Успешно создан файл result.json со списком необходимых навыков')
 
+        large_text = open('result.json', 'r').read()
+        splitted_text = util.smart_split(large_text, chars_per_string=3000)
+        for text in splitted_text:
+            bot.send_message(message.chat.id, text)
+
+
         f = open('city.json', 'w')
         f.write(result_city_json)
         f.close()
 
+
         print('Успешно создан файл city.fson со списком городов')
         bot.send_message(message.chat.id, f'Успешно создан файл city.json со списком городов')
+
+        large_text = open('city.json', 'r').read()
+        splitted_text = util.smart_split(large_text, chars_per_string=3000)
+        for text in splitted_text:
+            bot.send_message(message.chat.id, text)
+
 
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True)
         markup.add('ДА', 'НЕТ')
