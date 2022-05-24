@@ -3,7 +3,10 @@ import pprint
 from collections import Counter
 from operator import itemgetter
 import json
+DOMAIN = 'https://api.hh.ru/'
+url_vacancies = f'{DOMAIN}vacancies'
 
+# def hhparser(proff = 'Python developer'):
 my_skill_list = []
 my_city_list = []
 total_skill = []
@@ -13,13 +16,10 @@ main_count = 0
 modify_my_city_list = []
 modify_skill_list = []
 
-DOMAIN = 'https://api.hh.ru/'
 
 proff = input('Выберите профессию для анализа: ')
-page = int(input('Сколько страниц анализировать? (мах 100): '))
-# proff = 'python developer'
 
-url_vacancies = f'{DOMAIN}vacancies'
+page = 1 #int(input('Сколько страниц анализировать? (мах 100): '))
 
 #Перебор страниц
 
@@ -64,7 +64,10 @@ for page_count in range(page):
         except:
             pass
 
-    print(f'Всего вакансий спарсено {main_count}')
+    total_result = result['found']
+    print(f'Всего {total_result} вакансий найдено')
+    print(f'{main_count} вакансий {proff} спарсено')
+
 
 
 lens_skill_list = len(my_skill_list)
@@ -73,8 +76,8 @@ lens_my_city_list = len(my_city_list)
 
 modify_skill_list = Counter(my_skill_list)
 modify_my_city_list = Counter(my_city_list)
-lens_end_skill = len(modify_skill_list)
 
+lens_end_skill = len(modify_skill_list)
 lens_end_city = len(modify_my_city_list)
 
 
@@ -115,16 +118,20 @@ result_city_json = json.dumps(result_city, ensure_ascii=False, indent=4)
 f = open('result.txt', 'w')
 f.write(str(result_skill))
 f.close()
+print('Успешно создан файл result.txt со списком необходимых навыков')
 
 f = open('result.json', 'w')
 f.write(result_skill_json)
 f.close()
+print('Успешно создан файл result.fson со списком необходимых навыков')
 
-f = open('dispersion.txt', 'w')
+f = open('city.txt', 'w')
 f.write(str(result_city))
 f.close()
 
-f = open('dispersion.json', 'w')
+print('Успешно создан файл city.txt со списком городов')
+f = open('city.json', 'w')
 f.write(result_city_json)
 f.close()
+print('Успешно создан файл city.fson со списком городов')
 
