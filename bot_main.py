@@ -113,7 +113,9 @@ def parsing(message):
 
             total_result = result['found']
 
-
+        # print(my_city_list)
+        # print('*' * 50)
+        # print(my_skill_list)
 
 
         print(f'{main_count} вакансий {proff} спарсено')
@@ -131,6 +133,28 @@ def parsing(message):
         lens_end_skill = len(modify_skill_list)
         lens_end_city = len(modify_my_city_list)
 
+        modify_skill_list_new = Counter(modify_skill_list).most_common(10)
+        modify_my_city_list_new = Counter(modify_my_city_list).most_common(10)
+        # print(modify_my_city_list_new)
+        # print('*' * 50)
+        # print(modify_skill_list_new)
+
+
+        bot.send_message(message.chat.id, '-' * 20)
+
+        bot.send_message(message.chat.id, f'Парсинга - НАВЫКИ для: {proff.upper()}:')
+        for counter in modify_skill_list_new:
+            print(counter)
+            bot.send_message(message.chat.id, f'{counter}:')
+        bot.send_message(message.chat.id, '-' * 20)
+
+        bot.send_message(message.chat.id, f'Парсинга - ГОРОДА для: {proff.upper()}:')
+        for counter in modify_my_city_list_new:
+            print(counter)
+            bot.send_message(message.chat.id, f'{counter}:')
+        bot.send_message(message.chat.id, '-' * 20)
+
+        # bot.send_message(message.chat.id, f'Парсинга - НАВЫКИ для: {proff.upper()}:')
         for counter in range(lens_end_skill):
             name = list(modify_skill_list.keys())[counter]
             count = list(modify_skill_list.values())[counter]
@@ -138,6 +162,7 @@ def parsing(message):
             percent = '{percent:.1%}'.format(percent=path)
 
             total_skill.append({'name': name, 'percent': percent, 'count': count})
+            # bot.send_message(message.chat.id, f'{name}:  {percent}')
 
         total_skill = (sorted(total_skill, key=itemgetter('count'), reverse=True))
 
@@ -148,6 +173,7 @@ def parsing(message):
         }
         result_skill_json = json.dumps(result_skill, ensure_ascii=False, indent=4)
 
+        # bot.send_message(message.chat.id, f'Парсинга - ГОРОДА для: {proff.upper()}:')
         for counter in range(lens_end_city):
             name = list(modify_my_city_list.keys())[counter]
             count = list(modify_my_city_list.values())[counter]
@@ -155,6 +181,8 @@ def parsing(message):
             percent = '{percent:.1%}'.format(percent=path)
 
             total_city.append({'name': name, 'percent': percent, 'count': count})
+
+            # bot.send_message(message.chat.id, f'{name}:  {percent}')
 
         total_city = (sorted(total_city, key=itemgetter('count'), reverse=True))
 
@@ -189,9 +217,9 @@ def parsing(message):
         last_name = message.chat.last_name
         try:
             if message.text == u'ДА':
-                with open('result.json', 'rb') as data:
+                with open('result.json', 'r') as data:
                     bot.send_document(message.chat.id, data)
-                with open('city.json', 'rb') as data:
+                with open('city.json', 'r') as data:
                     bot.send_document(message.chat.id, data)
                 bot.send_message(message.chat.id, f'Спасибо за использование бота, {first_name} {last_name}!')
             elif message.text == u'НЕТ':
@@ -200,8 +228,6 @@ def parsing(message):
                 raise Exception('Ошибка выбора')
         except:
             bot.send_message(message.chat.id, 'Неизвестная команда')
-
-
 
 bot.infinity_polling()
 
